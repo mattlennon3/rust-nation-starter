@@ -4,7 +4,7 @@ use hs_hackathon::prelude::*;
 use hs_hackathon::vision::{detect, BoundingBox, LedDetectionConfig};
 
 /// A utility inference function
-#[doc(hidden)]
+// #[doc(hidden)]
 pub(crate) async fn infer(
     colors: &TeamColors,
     camera: &Camera,

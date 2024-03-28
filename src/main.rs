@@ -1,14 +1,17 @@
 mod cheats;
 
+use std::time::Duration;
+
 use hs_hackathon::prelude::*;
 
 use cheats::angles::Vector;
 use cheats::approaching::Hint;
 use cheats::positioning::Position;
+use cheats::internal::infer;
 use cheats::TeamColors;
 
 const CAR: Color = Color::Red;
-const TARGET: Color = Color::Blue;
+const TARGET: Color = Color::Green;
 
 #[allow(unused)]
 struct MapState {
@@ -19,7 +22,16 @@ struct MapState {
 #[allow(unused)]
 impl MapState {
     pub async fn infer(drone: &mut Camera) -> eyre::Result<Self> {
-        unimplemented!()
+        let colors = TeamColors {
+            car: CAR,
+            target: TARGET,
+        };
+        let (car, target) = infer(&colors, drone).await?;
+
+        Ok(Self {
+            car: car.into(),
+            target: target.into(),
+        })
     }
 
     async fn car_orientation(
@@ -57,6 +69,8 @@ impl State {
     ) -> eyre::Result<()> {
         match self {
             State::Turning => loop {
+                let snapshot = drone.snapshot();
+                motor.move_for(Velocity::forward(), Duration::from_secs(1)).await.unwrap();
                 unimplemented!()
             },
             State::Approaching => {
